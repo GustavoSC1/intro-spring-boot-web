@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "musicas")
 public class Musica {
- 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
