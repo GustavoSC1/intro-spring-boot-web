@@ -36,32 +36,29 @@ public class PlaylistController {
 		return "/playlist/add";
 	}
 	
-	@PostMapping("salvar")
-	public String salvar(@Valid @ModelAttribute("playlist") Playlist playlist, BindingResult result, RedirectAttributes attr){
-		if(result.hasErrors()) {
-			return "/playlist/add";
-		}
+	@PostMapping("/salvar")
+    public String salvar(@Valid @ModelAttribute("playlist") Playlist playlist, BindingResult result, RedirectAttributes attr) {
+        System.out.println("POST");
+		if (result.hasErrors()) {
+            return "/playlist/add";
+        }
 		
-		playlistService.salvar(playlist);
-		attr.addFlashAttribute("mensagem", "Playlist criada com sucesso.");
-		return "redirect:/playlists/listar";
-	}
-	
-	@GetMapping("/{îd}/atualizar")
-	public ModelAndView preAtualizar(@PathVariable("id") long id, ModelMap model) {
-		Playlist playlist = playlistService.recuperarPorId(id);
-		model.addAttribute("playlist", playlist);
-		return new ModelAndView("/playlist/add", model);
-	}
-	
-	@PutMapping("salvar")
-	public String atualizar(@Valid @ModelAttribute("playlist") Playlist playlist, BindingResult result, RedirectAttributes attr){
-		if(result.hasErrors()) {
-			return "/playlist/add";
+		if (playlist.getId() != 0) {
+			playlistService.atualizar(playlist);
+	        attr.addFlashAttribute("mensagem", "Playlist atualizada com sucesso.");
+	        return "redirect:/playlists/listar";
 		}
-		
-		playlistService.atualizar(playlist);
-		attr.addFlashAttribute("mensagem", "Playlist atualizada com sucesso.");
-		return "redirect:/playlists/listar";
-	}
+
+        playlistService.salvar(playlist);
+        attr.addFlashAttribute("mensagem", "Playlist criada com sucesso.");
+        return "redirect:/playlists/listar";
+    }
+	
+	@GetMapping("/{id}/atualizar")
+    public ModelAndView preAtualizar(@PathVariable("id") long id, ModelMap model) {
+        Playlist playlist = playlistService.recuperarPorId(id);
+        model.addAttribute("playlist", playlist);
+        return new ModelAndView("/playlist/add", model);
+    }	
+	
 }
