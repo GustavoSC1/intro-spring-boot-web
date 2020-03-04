@@ -59,6 +59,13 @@ public class PlaylistController {
         Playlist playlist = playlistService.recuperarPorId(id);
         model.addAttribute("playlist", playlist);
         return new ModelAndView("/playlist/add", model);
-    }	
+    }
+	
+	@GetMapping("/{id}/remover")
+	public String remover(@PathVariable("id") long id, RedirectAttributes attr) {
+		playlistService.excluir(id);
+		attr.addFlashAttribute("mensagem", "Playlist excluida com sucesso.");
+		return "redirect:/playlists/listar";
+	}
 	
 }
