@@ -42,6 +42,11 @@ public class MusicaController {
 		if(result.hasErrors()) {
 			return "/musica/add";
 		}
+		if(playlistId != 0) {
+			musicaService.atualizar(musica, playlistId);
+			attr.addFlashAttribute("mensagem", "Música atualizada com sucesso.");
+			return "redirect:/playlists/" + playlistId + "/musicas/listar";
+		}
 		
 		musicaService.salvar(musica, playlistId);
 		attr.addFlashAttribute("mensagem", "Musica salva com sucesso.");
@@ -55,18 +60,7 @@ public class MusicaController {
 		model.addAttribute("playlistId", playlistId);
 		return new ModelAndView("/musica/add", model);		
 	}
-	
-	@PutMapping("/salvar")
-	public String atualizar(@PathVariable("playlistId") long playlistId, @Valid @ModelAttribute("musica") Musica musica, BindingResult result, RedirectAttributes attr) {
-		if(result.hasErrors()) {
-			return "/musica/add";
-		}
 		
-		musicaService.atualizar(musica, playlistId);
-		attr.addFlashAttribute("mensagem", "Música atualizada com sucesso.");
-		return "redirect:/playlists/" + playlistId + "/musicas/listar";
-	}
-	
 	@GetMapping("/{musicaId}/remover")
 	public String remover(@PathVariable("playlistId") long playlistId, @PathVariable("musicaId") long musicaId, RedirectAttributes attr) {
 		musicaService.excluir(playlistId, musicaId);
